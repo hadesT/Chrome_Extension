@@ -1,4 +1,5 @@
 import sys
+########## Display ####################################
 Option=[("S","Split file")]
 if len(sys.argv)==1 or sys.argv[1].lower()=="help":
 	print "Usage:",sys.argv[0],"file_name","[Option]"
@@ -6,6 +7,7 @@ if len(sys.argv)==1 or sys.argv[1].lower()=="help":
 	for (option,description) in Option:
 		print "\t"+option+"\t\t"+description  
 	exit()
+#######################################################
 lib=[("PNG","89504e470d0a1a0a","49454e44ae426082","png"),
 ("RAR","526172211a0700","rar"),
 ("JPG","ffd8ffe0","ffd9","jpg"),
@@ -26,7 +28,13 @@ print "[+]File detected:"
 for i in range(0,len(lib)):
 	a=f.count(lib[i][1])
 	if a!=0:
-		print "   [-]"+lib[i][0]+": ",a
+		print "   [-]"+lib[i][0]+": ",a,
+		##### Check image Exif #########
+		if (lib[i][0]=="PNG" or lib[i][0]=="JPG") and f.count("45786966")!=0:
+			print "Exif("+str(f.count("45786966"))+")"
+		else:
+			print 
+		################################
 if len(sys.argv)>2:
 	try:
 		if(len(sys.argv[2])):
@@ -43,7 +51,7 @@ if len(sys.argv)>2:
 					print "signal_file not found in library. Sorry !!!"
 					exit()
 				print "[+]Slpitting file:"
-				#File co trailer
+				######### File has trailer (Footer)#####
 				if len(lib[position])>3:
 					for i in range(1,len(b)):
 						try:
@@ -54,7 +62,8 @@ if len(sys.argv)>2:
 							filename.close()
 						except TypeError:
 							continue
-				#file ko co trailer
+				############################################
+				######### File hasnt trailer (Footer) ######
 				else:
 					for i in range(1,len(b)):
 						try:
@@ -67,7 +76,6 @@ if len(sys.argv)>2:
 							continue
 				print "Done"
 				#############################################3
-				#print len(b[1]),len(b[2])
 			else:
 				print "Usage:",sys.argv[0],"help ---> for details"
 
